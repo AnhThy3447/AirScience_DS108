@@ -76,7 +76,6 @@ Dữ liệu đã chuẩn hóa và phân loại theo từng hãng hàng không, s
     ├── 05_web_demo                       # Demo website tương tác với người dùng
 ├── paper.pdf
 ├── slides.pdf
-├── README_visualization                     # Phục vụ cho README.md
 ├── README.md                         # File mô tả dự án
 ```
 ## 5. Thực Thi
@@ -86,8 +85,8 @@ Dữ liệu đã chuẩn hóa và phân loại theo từng hãng hàng không, s
 
 ### Khai phá dữ liệu:
 Từ kết quả EDA, nhóm cần cẩn trọng trong cách xử lý outliers. Đồng thời, nhóm quyết định chia dữ liệu theo hãng bay thay vì theo địa điểm đến hay các yếu tố khác. 
-    ![alt text](README_visualization/image-0.png)
-    ![alt text](README_visualization/image-1.png)
+    ![](https://github.com/user-attachments/assets/4a3a8c6d-299a-43f4-ab5d-65169c4444e8)
+    ![](https://github.com/user-attachments/assets/8a4ca0ab-2f91-4d7a-bcea-b7c4027f6b85)
 
 ### Huấn luyện mô hình:
 - Chia dữ liệu:
@@ -101,7 +100,7 @@ Từ kết quả EDA, nhóm cần cẩn trọng trong cách xử lý outliers. �
     - Độ đo: `R2-Score`, `MAE`, `MAPE`
     - Mô hình: `AdaBoost`, `BaggingRegressor`, `GradientBoostingRegressor`, `DecisionTreeRegressor`, `RandomForestRegressor`, `ExtraTreesRegressor`
     - Mô hình lựa chọn: **Gradient Boosting Regressor** với xu hướng tăng giảm dự đoán của các hãng Bamboo Airways, VietNam Airlines, Vietjet Air, Viettravel Airlines khá sát với thực tế
-    ![alt text](README_visualization/image-2.png)
+    ![](https://github.com/user-attachments/assets/d43509aa-bef7-47f4-917f-60f6f176fadc)
 
 - Thực nghiệm (`Test_data`):
     
@@ -125,11 +124,11 @@ Từ kết quả EDA, nhóm cần cẩn trọng trong cách xử lý outliers. �
     Dựa vào kết quả của threshold hệ thống sẽ đưa ra khuyến nghị phù hợp:
     - Hình bên trái: Khi giá vé lớn hơn ngưỡng, mô hình sẽ khuyến nghị khách hàng nên chờ (label = 0). 
     - Hình bên phải: Khi giá vé bé hơn ngưỡng, khuyến nghị mô hình đưa ra là nên mua (label = 1).
-    ![alt text](README_visualization/image-3.png)
+    ![](https://github.com/user-attachments/assets/183ba274-acd3-4020-9353-99f9f081bc52)
 
 ### Chạy web thử nghiệm:
-![alt text](README_visualization/image-4.png)
-![alt text](README_visualization/image-5.png)
+![](https://github.com/user-attachments/assets/88993a36-6209-42e0-af43-f21339476ee8)
+![](https://github.com/user-attachments/assets/9e24ad66-906b-4e52-822a-c7b66ffa4384)
 
 ## 6. Tài Liệu Liên Quan
 - Báo cáo chi tiết: [(paper.pdf)](paper.pdf)  
