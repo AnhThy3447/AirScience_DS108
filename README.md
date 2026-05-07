@@ -4,11 +4,11 @@ _Đồ án môn học DS108 - Thu thập và tiền xử lý dữ liệu_
 ## Mục lục
 - [1. Tổng Quan](#1-tổng-quan)
 - [2. Tính Năng](#2-tính-năng)
-- [3. Bộ Dữ Liệu](#2-bộ-dữ-liệu)
+- [3. Bộ Dữ Liệu](#3-bộ-dữ-liệu)
 - [4. Cấu Trúc Dự Án](#4-cấu-trúc-dự-án)
-- [5. Thực Thi](#4-thực-thi)
-- [6. Tài Liệu Liên Quan](#5-tài-liệu-liên-quan)
-- [7. Thành Viên](#6-thành-viên)
+- [5. Thực Thi](#5-thực-thi)
+- [6. Tài Liệu Liên Quan](#6-tài-liệu-liên-quan)
+- [7. Thành Viên](#7-thành-viên)
 
 ## 1. Tổng Quan
 Nhóm nghiên cứu đã tiến hành thu thập và phân tích dữ liệu vé máy bay, sau đó ứng dụng các kỹ thuật học máy để xây dựng một hệ thống dự đoán giá vé theo thời gian. Mục tiêu của hệ thống này là đưa ra khuyến nghị về thời điểm mua vé tối ưu, nhằm hỗ trợ khách hàng đưa ra quyết định thông minh và tiết kiệm chi phí.
