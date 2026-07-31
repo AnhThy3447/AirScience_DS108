@@ -106,20 +106,21 @@ The system then recommends:
 
 <img src="https://github.com/user-attachments/assets/183ba274-acd3-4020-9353-99f9f081bc52" width="800" alt="Buy vs Wait recommendation" />
 
-### Demo Website
-The recommendation system is served through an interactive demo website where users can check the buy/wait signal for a given flight.
+### 🌐 Demo Website
+The recommendation system is hosted as an interactive web application, allowing users to query targeted flight routes and view real-time **Buy / Wait** decision signals.
 
-<img src="https://github.com/user-attachments/assets/88993a36-6209-42e0-af43-f21339476ee8" width="800" alt="Demo website" />
-<img src="https://github.com/user-attachments/assets/9e24ad66-906b-4e52-822a-c7b66ffa4384" width="800" alt="Demo website result" />
+> 🔗 **Live Demo:** [dbthyy.github.io/airfare-forecast](https://dbthyy.github.io/airfare-forecast/)
 
+> [!NOTE]
+> **System Architecture Note:** In a full production deployment, the backend triggers on-demand data scraping and model inference upon user query. To optimize resource utilization and prevent unnecessary server load, this live web demo utilizes pre-cached prediction pipelines rather than continuous background scraping.
+
+<img src="https://github.com/user-attachments/assets/9100ae97-73de-422b-a325-03c7e32f2148" width="800" alt="Airfare Recommendation System - Demo Interface" />
 ---
 
 ## 🛠 Tech Stack
 * **Data Collection:** Selenium, Microsoft Edge WebDriver
 * **Data Processing:** Python (`pandas`, `numpy`)
 * **Modeling:** scikit-learn (`GradientBoostingRegressor` and other ensemble regressors)
-* **Web Demo:** *(add your framework here, e.g. Flask / Streamlit / React)*
-
 ---
 
 ## ⚙️ Project Setup
@@ -161,11 +162,11 @@ The recommendation system is served through an interactive demo website where us
 
 ## 👥 Contributors
 
-| Student ID | Name | Role & Core Contributions |
+| Student ID | Name |
 | :--- | :--- | :--- |
-| **23521563** | **Đinh Bảo Thy** | *(add specific contributions)* |
-| **23521565** | **Võ Ngọc Anh Thy** | *(add specific contributions)* |
-| **23521617** | **Nguyễn Vũ Thùy Trâm** | *(add specific contributions)* |
+| **23521563** | **Đinh Bảo Thy** |
+| **23521565** | **Võ Ngọc Anh Thy** | 
+| **23521617** | **Nguyễn Vũ Thùy Trâm** | 
 
 ---
 📜 License
