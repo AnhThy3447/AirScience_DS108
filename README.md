@@ -1,26 +1,37 @@
-# AIRSCIENCE: Airline Pricing Analysis & Recommendation System
+# AirScience: Airline Pricing Analysis & Recommendation System
 
-## Table of Contents
-- [1. Overview](#1-overview)
-- [2. Features](#2-features)
-- [3. Dataset](#3-dataset)
-- [4. Project Structure](#4-project-structure)
-- [5. Execution](#5-execution)
-- [6. Related Documents](#6-related-documents)
-- [7. Team Members](#7-team-members)
+---
 
-## 1. Overview
-The team collected and analyzed flight ticket pricing data, then applied machine learning techniques to build a system that predicts ticket prices over time. The goal of this system is to recommend the optimal time to purchase a ticket, helping customers make smarter, more cost-effective decisions.
+## 📌 Table of Contents
+- [Overview](#-overview)
+- [System Architecture](#-system-architecture)
+- [Data Design (Medallion Architecture)](#-data-design-medallion-architecture)
+- [Data Pipeline](#-data-pipeline)
+- [Modeling & Analysis](#-modeling--analysis)
+- [Results & Recommendation System](#-results--recommendation-system)
+- [Tech Stack](#-tech-stack)
+- [Project Setup](#-project-setup)
+- [Contributors](#-contributors)
+- [License](#-license)
 
-## 2. Features
-- Analyzes the data to uncover hidden relationships between ticket price and other flight attributes.
-- Uses machine learning models to recommend the best time to book a flight.
-- Takes basic flight ticket attributes as input and outputs a predicted price, which is then used to determine a reasonable booking time and a "buy now vs. wait" recommendation.
-- A demo website provides booking-time recommendations to help users choose the right time to purchase within their budget, tailored to the Vietnamese market.
+---
 
-## 3. Dataset
+## 📖 Overview
+AirScience is an end-to-end system for collecting and analyzing airline ticket pricing data in the Vietnamese market. The project applies machine learning to build a price-prediction model that forecasts how a flight's price will move over time, and uses that forecast to recommend the optimal moment to buy — helping travelers avoid overpaying and make informed booking decisions. The final output is a demo website that surfaces this recommendation directly to users.
 
-Data is organized using a tiered **Medallion Architecture**.
+---
+
+## 🏗 System Architecture
+The pipeline is designed across 4 key stages:
+1. **Data Collection:** Scraped flight ticket listings from Traveloka using Selenium, sampling each flight at multiple points in the booking window.
+2. **Data Preprocessing:** Cleaned raw data, handled missing values, standardized formats, and engineered features (organized via a Bronze → Silver → Gold layered structure).
+3. **Modeling:** Trained and compared multiple regression models to predict ticket price as a function of time-to-departure and other flight attributes.
+4. **Recommendation Engine & Demo:** Converted price predictions into a binary "Buy now" / "Wait" recommendation, and served it through an interactive demo website.
+
+---
+
+## 📐 Data Design (Medallion Architecture)
+Data is organized using a tiered **Medallion Architecture** (Bronze / Silver / Gold) to progressively clean, standardize, and segment the dataset for analysis.
 
 ### Bronze Layer
 Raw data collected from the Traveloka website, including:
@@ -33,105 +44,129 @@ Raw data collected from the Traveloka website, including:
 - `price`, `start_time`, `end_time`, `trip_time`, `checked_baggage`, `hand_luggage`
 
 ### Silver Layer
-- Data has been cleaned, missing values handled, and formats standardized.
-- Size: 46,549 samples with 11 features.
+Cleaned data with missing values handled and formats standardized — **46,549 samples across 11 features**:
 
-    | Index | Feature           | Description                       | Type         |
-    |-------|-------------------|------------------------------------|--------------|
-    | 1     | `id`              | Flight ID                          | categorical  |
-    | 2     | `brand`           | Airline                            | categorical  |
-    | 3     | `price`           | Ticket price (VND/passenger)       | numeric      |
-    | 4     | `destination`     | Destination                        | categorical  |
-    | 5     | `hand_luggage`    | Hand luggage allowance (kg)        | numeric      |
-    | 6     | `checked_baggage` | Checked baggage allowance (kg)     | numeric      |
-    | 7     | `start_hour`      | Departure time slot                | categorical  |
-    | 8     | `end_hour`        | Arrival time slot                  | categorical  |
-    | 9     | `trip_mins`       | Flight duration                    | numeric      |
-    | 10    | `is_holidays`     | Holiday classification of the day  | categorical  |
-    | 11    | `days_left`       | Days remaining before departure    | numeric      |
+| Index | Feature           | Description                       | Type         |
+|-------|-------------------|------------------------------------|--------------|
+| 1     | `id`              | Flight ID                          | categorical  |
+| 2     | `brand`           | Airline                            | categorical  |
+| 3     | `price`           | Ticket price (VND/passenger)       | numeric      |
+| 4     | `destination`     | Destination                        | categorical  |
+| 5     | `hand_luggage`    | Hand luggage allowance (kg)        | numeric      |
+| 6     | `checked_baggage` | Checked baggage allowance (kg)     | numeric      |
+| 7     | `start_hour`      | Departure time slot                | categorical  |
+| 8     | `end_hour`        | Arrival time slot                  | categorical  |
+| 9     | `trip_mins`       | Flight duration                    | numeric      |
+| 10    | `is_holidays`     | Holiday classification of the day  | categorical  |
+| 11    | `days_left`       | Days remaining before departure    | numeric      |
 
 ### Gold Layer
-Data standardized and segmented by airline, ready for analysis.
+Data standardized and segmented by airline (`Bamboo_Airways.csv`, `VietJet_Air.csv`, `Vietnam_Airlines.csv`, `Vietravel_Airlines.csv`), ready for modeling.
 
-## 4. Project Structure
-```bash
-.
-├── Source_code
-    ├── Data
-    │   ├── Bronze_layer/
-    │   │   └── merged_file.csv           
-    │   ├── Silver_layer/
-    │   │   └── cleaned_file.csv          
-    │   ├── Gold_layer/
-    │   │   ├── Bamboo_Airways.csv
-    │   │   ├── VietJet_Air.csv
-    │   │   ├── Vietnam_Airlines.csv
-    │   │   └── Vietravel_Airlines.csv   
-    │
-    ├── 01_crawling.ipynb                 # Data collection
-    ├── 02_preprocessing.ipynb            # Data preprocessing: cleaning, formatting, handling missing values
-    ├── 03_EDA.ipynb                      # Exploratory Data Analysis
-    ├── 04_modeling.ipynb                 # Model training and evaluation
-    ├── 05_web_demo                       # Interactive demo website
-├── paper.pdf
-├── slides.pdf
-├── README.md                         # Project description file
-```
+---
 
-## 5. Execution
-### Data Collection:
-- Used Selenium combined with Microsoft Edge for web scraping.
-- Limitation: Not fully automated due to Traveloka's CAPTCHA blocking. 
-### Data Exploration:
-Based on the EDA results, the team took extra care in handling outliers. The team also decided to split the data by airline rather than by destination or other factors.
-    ![](https://github.com/user-attachments/assets/4a3a8c6d-299a-43f4-ab5d-65169c4444e8)
-    ![](https://github.com/user-attachments/assets/8a4ca0ab-2f91-4d7a-bcea-b7c4027f6b85)
+## 🔄 Data Pipeline
+- **Collection:** Selenium + Microsoft Edge automation against Traveloka. *Limitation: not fully automated due to CAPTCHA blocking*, requiring some manual intervention during scraping.
+- **Exploratory Data Analysis:** Careful handling of outliers was required; the team ultimately split the dataset **by airline** rather than by destination or other candidate factors, based on EDA findings.
 
-### Model Training:
-- Data split:
-    - `Test_data`: 40 flight IDs
-    - `Train + Test`:
-        - `Test` = 18% * (dataset - Test_data) + Test_data
-        - `Train` = dataset - Test
-    - Outliers were handled separately for each file.
+<img src="https://github.com/user-attachments/assets/4a3a8c6d-299a-43f4-ab5d-65169c4444e8" width="800" alt="EDA distribution" />
+<img src="https://github.com/user-attachments/assets/8a4ca0ab-2f91-4d7a-bcea-b7c4027f6b85" width="800" alt="EDA relationships" />
 
-- Model training (`Train + Test`):
-    - Metrics: `R2-Score`, `MAE`, `MAPE`
-    - Models evaluated: `AdaBoost`, `BaggingRegressor`, `GradientBoostingRegressor`, `DecisionTreeRegressor`, `RandomForestRegressor`, `ExtraTreesRegressor`
-    - Selected model: **Gradient Boosting Regressor**, whose predicted price trends for Bamboo Airways, Vietnam Airlines, VietJet Air, and Vietravel Airlines closely matched actual values.
-    ![](https://github.com/user-attachments/assets/d43509aa-bef7-47f4-917f-60f6f176fadc)
+---
 
-- Experimentation (`Test_data`):
+## 📊 Modeling & Analysis
 
-    To apply the model in practice, the team used data from 40 flights to determine an appropriate purchase threshold, from which a **Buy (1)** or **Wait (0)** recommendation is generated.
+### Data Split
+- `Test_data`: 40 flight IDs, held out for the final recommendation experiment.
+- `Train + Test`:
+  - `Test` = 18% × (dataset − `Test_data`) + `Test_data`
+  - `Train` = dataset − `Test`
+- Outliers were handled separately per airline file.
 
-    Threshold calculation process:
-    - Step 1: Predict ticket prices for upcoming days using the trained Gradient Boosting Regressor model:
+### Model Comparison
+Six regression models were trained and evaluated using `R²-Score`, `MAE`, and `MAPE`:
+`AdaBoost`, `BaggingRegressor`, `GradientBoostingRegressor`, `DecisionTreeRegressor`, `RandomForestRegressor`, `ExtraTreesRegressor`
 
-        `P={p_1,p_2,p_3,…,p_n }`
-    - Step 2: Select the lowest 10% of predicted prices (k = number of tickets):
+**Selected model: Gradient Boosting Regressor** — its predicted price trends for Bamboo Airways, Vietnam Airlines, VietJet Air, and Vietravel Airlines closely tracked actual observed prices.
 
-        `P_low={p_1,p_2,p_3,…,p_k }`
-    - Step 3: Compute the threshold as the average of P_low:
+<img src="https://github.com/user-attachments/assets/d43509aa-bef7-47f4-917f-60f6f176fadc" width="800" alt="Model performance comparison" />
 
-        `threshold=1/k ∑_(i=1)^k p_i`
+---
 
-    Based on the threshold, the system generates a recommendation:
-    - Left image: When the ticket price is higher than the threshold, the model recommends waiting (label = 0).
-    - Right image: When the ticket price is lower than the threshold, the model recommends buying (label = 1).
-    ![](https://github.com/user-attachments/assets/183ba274-acd3-4020-9353-99f9f081bc52)
+## 🎯 Results & Recommendation System
+Using the trained model on the held-out `Test_data` (40 flights), the team derived a purchase threshold to convert price forecasts into a simple **Buy / Wait** signal:
 
-### Running the Demo Website:
-![](https://github.com/user-attachments/assets/88993a36-6209-42e0-af43-f21339476ee8)
-![](https://github.com/user-attachments/assets/9e24ad66-906b-4e52-822a-c7b66ffa4384)
+1. **Predict** future prices for a flight across the remaining booking window: `P = {p_1, p_2, …, p_n}`
+2. **Select** the lowest 10% of predicted prices (`k` tickets): `P_low = {p_1, p_2, …, p_k}`
+3. **Compute** the threshold as the mean of `P_low`: `threshold = (1/k) Σ p_i`
 
-## 6. Related Documents
-- Detailed report: [(paper.pdf)](paper.pdf)  
-- Presentation slides: [(slides.pdf)](slides.pdf)
+The system then recommends:
+- **Wait (label = 0)** — when the current price is above the threshold.
+- **Buy (label = 1)** — when the current price is at or below the threshold.
 
-## 7. Team Members
-| Name                    | Student ID |
-|-------------------------|------------|
-| Đinh Bảo Thy            | 23521563   |
-| Võ Ngọc Anh Thy         | 23521565   |
-| Nguyễn Vũ Thùy Trâm     | 23521617   |
+<img src="https://github.com/user-attachments/assets/183ba274-acd3-4020-9353-99f9f081bc52" width="800" alt="Buy vs Wait recommendation" />
+
+### Demo Website
+The recommendation system is served through an interactive demo website where users can check the buy/wait signal for a given flight.
+
+<img src="https://github.com/user-attachments/assets/88993a36-6209-42e0-af43-f21339476ee8" width="800" alt="Demo website" />
+<img src="https://github.com/user-attachments/assets/9e24ad66-906b-4e52-822a-c7b66ffa4384" width="800" alt="Demo website result" />
+
+---
+
+## 🛠 Tech Stack
+* **Data Collection:** Selenium, Microsoft Edge WebDriver
+* **Data Processing:** Python (`pandas`, `numpy`)
+* **Modeling:** scikit-learn (`GradientBoostingRegressor` and other ensemble regressors)
+* **Web Demo:** *(add your framework here, e.g. Flask / Streamlit / React)*
+
+---
+
+## ⚙️ Project Setup
+
+1. **Clone Repository:**
+   ```bash
+   git clone https://github.com/your-username/airscience.git
+   cd airscience
+   ```
+2. **Data Collection:**
+   ```bash
+   jupyter notebook Source_code/01_crawling.ipynb
+   ```
+3. **Preprocessing:**
+   ```bash
+   jupyter notebook Source_code/02_preprocessing.ipynb
+   ```
+4. **Exploratory Data Analysis:**
+   ```bash
+   jupyter notebook Source_code/03_EDA.ipynb
+   ```
+5. **Model Training:**
+   ```bash
+   jupyter notebook Source_code/04_modeling.ipynb
+   ```
+6. **Run the Demo Website:**
+   ```bash
+   cd Source_code/05_web_demo
+   # add your run command here, e.g. python app.py
+   ```
+
+---
+
+## 📄 Related Documents
+- Detailed report: [paper.pdf](paper.pdf)
+- Presentation slides: [slides.pdf](slides.pdf)
+
+---
+
+## 👥 Contributors
+
+| Student ID | Name | Role & Core Contributions |
+| :--- | :--- | :--- |
+| **23521563** | **Đinh Bảo Thy** | *(add specific contributions)* |
+| **23521565** | **Võ Ngọc Anh Thy** | *(add specific contributions)* |
+| **23521617** | **Nguyễn Vũ Thùy Trâm** | *(add specific contributions)* |
+
+---
+📜 License
+This repository is an academic project created for coursework purposes under course **DS108 - Data Collection and Preprocessing** at the **University of Information Technology (UIT), VNU-HCM**. All rights reserved by the project authors.
