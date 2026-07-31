@@ -163,7 +163,7 @@ The recommendation system is hosted as an interactive web application, allowing 
 ## 👥 Contributors
 
 | Student ID | Name |
-| :--- | :--- | :--- |
+| :--- | :--- | 
 | **23521563** | **Đinh Bảo Thy** |
 | **23521565** | **Võ Ngọc Anh Thy** | 
 | **23521617** | **Nguyễn Vũ Thùy Trâm** | 
