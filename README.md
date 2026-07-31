@@ -1,6 +1,5 @@
 # AirScience: Airline Pricing Analysis & Recommendation System
 
----
 
 ## 📌 Table of Contents
 - [Overview](#-overview)
@@ -14,12 +13,8 @@
 - [Contributors](#-contributors)
 - [License](#-license)
 
----
-
 ## 📖 Overview
 AirScience is an end-to-end system for collecting and analyzing airline ticket pricing data in the Vietnamese market. The project applies machine learning to build a price-prediction model that forecasts how a flight's price will move over time, and uses that forecast to recommend the optimal moment to buy — helping travelers avoid overpaying and make informed booking decisions. The final output is a demo website that surfaces this recommendation directly to users.
-
----
 
 ## 🏗 System Architecture
 The pipeline is designed across 4 key stages:
@@ -27,8 +22,6 @@ The pipeline is designed across 4 key stages:
 2. **Data Preprocessing:** Cleaned raw data, handled missing values, standardized formats, and engineered features (organized via a Bronze → Silver → Gold layered structure).
 3. **Modeling:** Trained and compared multiple regression models to predict ticket price as a function of time-to-departure and other flight attributes.
 4. **Recommendation Engine & Demo:** Converted price predictions into a binary "Buy now" / "Wait" recommendation, and served it through an interactive demo website.
-
----
 
 ## 📐 Data Design (Medallion Architecture)
 Data is organized using a tiered **Medallion Architecture** (Bronze / Silver / Gold) to progressively clean, standardize, and segment the dataset for analysis.
@@ -63,16 +56,12 @@ Cleaned data with missing values handled and formats standardized — **46,549 s
 ### Gold Layer
 Data standardized and segmented by airline (`Bamboo_Airways.csv`, `VietJet_Air.csv`, `Vietnam_Airlines.csv`, `Vietravel_Airlines.csv`), ready for modeling.
 
----
-
 ## 🔄 Data Pipeline
 - **Collection:** Selenium + Microsoft Edge automation against Traveloka. *Limitation: not fully automated due to CAPTCHA blocking*, requiring some manual intervention during scraping.
 - **Exploratory Data Analysis:** Careful handling of outliers was required; the team ultimately split the dataset **by airline** rather than by destination or other candidate factors, based on EDA findings.
 
 <img src="https://github.com/user-attachments/assets/4a3a8c6d-299a-43f4-ab5d-65169c4444e8" width="800" alt="EDA distribution" />
 <img src="https://github.com/user-attachments/assets/8a4ca0ab-2f91-4d7a-bcea-b7c4027f6b85" width="800" alt="EDA relationships" />
-
----
 
 ## 📊 Modeling & Analysis
 
@@ -90,8 +79,6 @@ Six regression models were trained and evaluated using `R²-Score`, `MAE`, and `
 **Selected model: Gradient Boosting Regressor** — its predicted price trends for Bamboo Airways, Vietnam Airlines, VietJet Air, and Vietravel Airlines closely tracked actual observed prices.
 
 <img src="https://github.com/user-attachments/assets/d43509aa-bef7-47f4-917f-60f6f176fadc" width="800" alt="Model performance comparison" />
-
----
 
 ## 🎯 Results & Recommendation System
 Using the trained model on the held-out `Test_data` (40 flights), the team derived a purchase threshold to convert price forecasts into a simple **Buy / Wait** signal:
@@ -115,13 +102,12 @@ The recommendation system is hosted as an interactive web application, allowing 
 > **System Architecture Note:** In a full production deployment, the backend triggers on-demand data scraping and model inference upon user query. To optimize resource utilization and prevent unnecessary server load, this live web demo utilizes pre-cached prediction pipelines rather than continuous background scraping.
 
 <img src="https://github.com/user-attachments/assets/9100ae97-73de-422b-a325-03c7e32f2148" width="800" alt="Airfare Recommendation System - Demo Interface" />
----
+
 
 ## 🛠 Tech Stack
 * **Data Collection:** Selenium, Microsoft Edge WebDriver
 * **Data Processing:** Python (`pandas`, `numpy`)
 * **Modeling:** scikit-learn (`GradientBoostingRegressor` and other ensemble regressors)
----
 
 ## ⚙️ Project Setup
 
@@ -152,13 +138,9 @@ The recommendation system is hosted as an interactive web application, allowing 
    # add your run command here, e.g. python app.py
    ```
 
----
-
 ## 📄 Related Documents
 - Detailed report: [paper.pdf](paper.pdf)
 - Presentation slides: [slides.pdf](slides.pdf)
-
----
 
 ## 👥 Contributors
 
