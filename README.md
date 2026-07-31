@@ -1,60 +1,59 @@
-_Đồ án môn học DS108 - Thu thập và tiền xử lý dữ liệu_
-# AIRSCIENCE: Phân Tích Dữ Liệu Ngành Hàng Không
+# AIRSCIENCE: Airline Pricing Analysis & Recommendation System
 
-## Mục lục
-- [1. Tổng Quan](#1-tổng-quan)
-- [2. Tính Năng](#2-tính-năng)
-- [3. Bộ Dữ Liệu](#3-bộ-dữ-liệu)
-- [4. Cấu Trúc Dự Án](#4-cấu-trúc-dự-án)
-- [5. Thực Thi](#5-thực-thi)
-- [6. Tài Liệu Liên Quan](#6-tài-liệu-liên-quan)
-- [7. Thành Viên](#7-thành-viên)
+## Table of Contents
+- [1. Overview](#1-overview)
+- [2. Features](#2-features)
+- [3. Dataset](#3-dataset)
+- [4. Project Structure](#4-project-structure)
+- [5. Execution](#5-execution)
+- [6. Related Documents](#6-related-documents)
+- [7. Team Members](#7-team-members)
 
-## 1. Tổng Quan
-Nhóm nghiên cứu đã tiến hành thu thập và phân tích dữ liệu vé máy bay, sau đó ứng dụng các kỹ thuật học máy để xây dựng một hệ thống dự đoán giá vé theo thời gian. Mục tiêu của hệ thống này là đưa ra khuyến nghị về thời điểm mua vé tối ưu, nhằm hỗ trợ khách hàng đưa ra quyết định thông minh và tiết kiệm chi phí.
+## 1. Overview
+The team collected and analyzed flight ticket pricing data, then applied machine learning techniques to build a system that predicts ticket prices over time. The goal of this system is to recommend the optimal time to purchase a ticket, helping customers make smarter, more cost-effective decisions.
 
-## 2. Tính Năng
-- Phân tích dữ liệu thông qua khai phá mối quan hệ giữa giá vé với các thuộc tính khác để đưa ra những quy luật ẩn
-- Sử dụng các mô hình học máy, đưa ra khuyến nghị về thời điểm đặt vé tối ưu nhất cho chuyến bay
-- Dữ liệu đầu vào là các thuộc tính cơ bản của một vé máy bay và đầu ra sẽ là giá vé dự đoán để đưa ra được thời điểm đặt vé hợp lý và khuyến nghị nên mua hay chờ.
-- Website demo đưa khuyến nghị hỗ trợ người dùng chọn đúng thời điểm đặt vé với chi phí, ngân sách phù hợp ở thị trường Việt Nam
+## 2. Features
+- Analyzes the data to uncover hidden relationships between ticket price and other flight attributes.
+- Uses machine learning models to recommend the best time to book a flight.
+- Takes basic flight ticket attributes as input and outputs a predicted price, which is then used to determine a reasonable booking time and a "buy now vs. wait" recommendation.
+- A demo website provides booking-time recommendations to help users choose the right time to purchase within their budget, tailored to the Vietnamese market.
 
-## 3. Bộ Dữ Liệu
+## 3. Dataset
 
-Dữ liệu được lưu theo cấu trúc phân tầng - Medallion Structure
+Data is organized using a tiered **Medallion Architecture**.
 
-### Bronze Layer 
-Dữ liệu thô thu thập từ trang web Traveloka, bao gồm:
-- `id` (do nhóm tự gán): id của chuyến bay với mỗi chuyến bay có tối thiểu 2 sample cho 2 ngày mua khác nhau
-- `start_day`, `end_day`, `crawl_date`: `crawl_date` bắt đầu từ 07/04/2025 đến 10/05/2025 và trước 20 ngày so với `start_day`
-- `destination`: 
-    - Thành phố lớn: Hà Nội (HAN), Hải Phòng (HPH), Đà Nẵng (DAD)
-    - Điểm đến du lịch: Phú Quốc (PQC), Nha Trang (CXR), Đà Lạt (DLI)
-- `brand` (hãng hàng không sẽ dựa theo các chuyến bay đến các địa điểm định trước): Bamboo Airways, Vietnam Airlines, VietJet Air, Viettravel Airlines
-- `price`, `start_time`, `end_time`,  `trip_time`, `checked_baggage`, `hand_luggage`
+### Bronze Layer
+Raw data collected from the Traveloka website, including:
+- `id` (assigned by the team): flight ID, with each flight having at least 2 samples corresponding to 2 different purchase dates.
+- `start_day`, `end_day`, `crawl_date`: `crawl_date` ranges from April 7, 2025 to May 10, 2025, and is always 20 days before `start_day`.
+- `destination`:
+    - Major cities: Hanoi (HAN), Hai Phong (HPH), Da Nang (DAD)
+    - Tourist destinations: Phu Quoc (PQC), Nha Trang (CXR), Da Lat (DLI)
+- `brand` (airline, determined based on flights to the predefined destinations): Bamboo Airways, Vietnam Airlines, VietJet Air, Vietravel Airlines
+- `price`, `start_time`, `end_time`, `trip_time`, `checked_baggage`, `hand_luggage`
 
 ### Silver Layer
-- Dữ liệu đã được làm sạch, xử lý giá trị thiếu, và chuẩn hóa định dạng.
-- Kích cỡ: 46,549 mẫu với 11 thuộc tính.
+- Data has been cleaned, missing values handled, and formats standardized.
+- Size: 46,549 samples with 11 features.
 
-    | Index | Feature           | Description                   | Type         |
-    |-------|-------------------|-------------------------------|--------------|
-    | 1     | `id`              | mã chuyến bay                 | categorical  |
-    | 2     | `brand`           | hãng bay                      | categorical  |
-    | 3     | `price`           | giá vé (VNĐ/khách)            | numeric      |
-    | 4     | `destination`     | điểm đến                      | categorical  |
-    | 5     | `hand_luggage`    | hành lý xách tay (kg)         | numeric      |
-    | 6     | `checked_baggage` | hành lý ký gửi (kg)           | numeric      |
-    | 7     | `start_hour`      | khung giờ khởi hành           | categorical  |
-    | 8     | `end_hour`        | khung giờ hạ cánh             | categorical  |
-    | 9     | `trip_mins`       | thời gian bay                 | numeric      |
-    | 10    | `is_holidays`     | phân loại ngày bay            | categorical  |
-    | 11    | `days_left`       | số ngày trước ngày bay       | numeric      |
+    | Index | Feature           | Description                       | Type         |
+    |-------|-------------------|------------------------------------|--------------|
+    | 1     | `id`              | Flight ID                          | categorical  |
+    | 2     | `brand`           | Airline                            | categorical  |
+    | 3     | `price`           | Ticket price (VND/passenger)       | numeric      |
+    | 4     | `destination`     | Destination                        | categorical  |
+    | 5     | `hand_luggage`    | Hand luggage allowance (kg)        | numeric      |
+    | 6     | `checked_baggage` | Checked baggage allowance (kg)     | numeric      |
+    | 7     | `start_hour`      | Departure time slot                | categorical  |
+    | 8     | `end_hour`        | Arrival time slot                  | categorical  |
+    | 9     | `trip_mins`       | Flight duration                    | numeric      |
+    | 10    | `is_holidays`     | Holiday classification of the day  | categorical  |
+    | 11    | `days_left`       | Days remaining before departure    | numeric      |
 
 ### Gold Layer
-Dữ liệu đã chuẩn hóa và phân loại theo từng hãng hàng không, sẵn sàng phân tích.
+Data standardized and segmented by airline, ready for analysis.
 
-## 4. Cấu Trúc Dự Án
+## 4. Project Structure
 ```bash
 .
 ├── Source_code
@@ -69,74 +68,70 @@ Dữ liệu đã chuẩn hóa và phân loại theo từng hãng hàng không, s
     │   │   ├── Vietnam_Airlines.csv
     │   │   └── Vietravel_Airlines.csv   
     │
-    ├── 01_crawling.ipynb                 # Thu thập dữ liệu
-    ├── 02_preprocessing.ipynb            # Tiền xử lý dữ liệu: làm sạch, định dạng, xử lý thiếu
-    ├── 03_EDA.ipynb                      # Phân tích dữ liệu khám phá (Exploratory Data Analysis)
-    ├── 04_modeling.ipynb                 # Huấn luyện mô hình và đánh giá kết quả
-    ├── 05_web_demo                       # Demo website tương tác với người dùng
+    ├── 01_crawling.ipynb                 # Data collection
+    ├── 02_preprocessing.ipynb            # Data preprocessing: cleaning, formatting, handling missing values
+    ├── 03_EDA.ipynb                      # Exploratory Data Analysis
+    ├── 04_modeling.ipynb                 # Model training and evaluation
+    ├── 05_web_demo                       # Interactive demo website
 ├── paper.pdf
 ├── slides.pdf
-├── README.md                         # File mô tả dự án
+├── README.md                         # Project description file
 ```
-## 5. Thực Thi
-### Thu thập dữ liệu:
-- Sử dụng tool Selenium và kết hợp MicrosoftEdge website.
-- Nhược điểm: chưa hoàn toàn tự động hóa do gặp chặn Captcha của Traveloka.
 
-### Khai phá dữ liệu:
-Từ kết quả EDA, nhóm cần cẩn trọng trong cách xử lý outliers. Đồng thời, nhóm quyết định chia dữ liệu theo hãng bay thay vì theo địa điểm đến hay các yếu tố khác. 
+## 5. Execution
+### Data Collection:
+- Used Selenium combined with Microsoft Edge for web scraping.
+- Limitation: Not fully automated due to Traveloka's CAPTCHA blocking. 
+### Data Exploration:
+Based on the EDA results, the team took extra care in handling outliers. The team also decided to split the data by airline rather than by destination or other factors.
     ![](https://github.com/user-attachments/assets/4a3a8c6d-299a-43f4-ab5d-65169c4444e8)
     ![](https://github.com/user-attachments/assets/8a4ca0ab-2f91-4d7a-bcea-b7c4027f6b85)
 
-### Huấn luyện mô hình:
-- Chia dữ liệu:
-    - `Test_data`: 40 id
+### Model Training:
+- Data split:
+    - `Test_data`: 40 flight IDs
     - `Train + Test`:
         - `Test` = 18% * (dataset - Test_data) + Test_data
         - `Train` = dataset - Test
-    - Xử lý outliers riêng cho từng file
+    - Outliers were handled separately for each file.
 
-- Huấn luyện mô hình (`Train + Test`):
-    - Độ đo: `R2-Score`, `MAE`, `MAPE`
-    - Mô hình: `AdaBoost`, `BaggingRegressor`, `GradientBoostingRegressor`, `DecisionTreeRegressor`, `RandomForestRegressor`, `ExtraTreesRegressor`
-    - Mô hình lựa chọn: **Gradient Boosting Regressor** với xu hướng tăng giảm dự đoán của các hãng Bamboo Airways, VietNam Airlines, Vietjet Air, Viettravel Airlines khá sát với thực tế
+- Model training (`Train + Test`):
+    - Metrics: `R2-Score`, `MAE`, `MAPE`
+    - Models evaluated: `AdaBoost`, `BaggingRegressor`, `GradientBoostingRegressor`, `DecisionTreeRegressor`, `RandomForestRegressor`, `ExtraTreesRegressor`
+    - Selected model: **Gradient Boosting Regressor**, whose predicted price trends for Bamboo Airways, Vietnam Airlines, VietJet Air, and Vietravel Airlines closely matched actual values.
     ![](https://github.com/user-attachments/assets/d43509aa-bef7-47f4-917f-60f6f176fadc)
 
-- Thực nghiệm (`Test_data`):
-    
-    
-    Để ứng dụng vào thực tiễn, nhóm sử dụng dữ liệu của 40 chuyến bay nhằm chọn ngưỡng mua vé phù hợp, từ đó đưa khuyến nghị Nên Mua (1) hay Nên Chờ (0).
+- Experimentation (`Test_data`):
 
-    Quá trình tính ngưỡng:
-    - Bước 1: Dự đoán giá vé chuyến bay các ngày tiếp theo bằng mô hình Gradient Boosting Regressor đã được huấn luyện:
-        
-        
+    To apply the model in practice, the team used data from 40 flights to determine an appropriate purchase threshold, from which a **Buy (1)** or **Wait (0)** recommendation is generated.
+
+    Threshold calculation process:
+    - Step 1: Predict ticket prices for upcoming days using the trained Gradient Boosting Regressor model:
+
         `P={p_1,p_2,p_3,…,p_n }`
-    - Bước 2: Chọn 10% giá vé thấp nhất (k là số lượng vé):
-        
+    - Step 2: Select the lowest 10% of predicted prices (k = number of tickets):
+
         `P_low={p_1,p_2,p_3,…,p_k }`
-    - Bước 3: Tính threshold là giá trị trung bình của Plow:
-        
-        
-        `threshold=1/k ∑_(i=1)^k p_i` 
+    - Step 3: Compute the threshold as the average of P_low:
 
+        `threshold=1/k ∑_(i=1)^k p_i`
 
-    Dựa vào kết quả của threshold hệ thống sẽ đưa ra khuyến nghị phù hợp:
-    - Hình bên trái: Khi giá vé lớn hơn ngưỡng, mô hình sẽ khuyến nghị khách hàng nên chờ (label = 0). 
-    - Hình bên phải: Khi giá vé bé hơn ngưỡng, khuyến nghị mô hình đưa ra là nên mua (label = 1).
+    Based on the threshold, the system generates a recommendation:
+    - Left image: When the ticket price is higher than the threshold, the model recommends waiting (label = 0).
+    - Right image: When the ticket price is lower than the threshold, the model recommends buying (label = 1).
     ![](https://github.com/user-attachments/assets/183ba274-acd3-4020-9353-99f9f081bc52)
 
-### Chạy web thử nghiệm:
+### Running the Demo Website:
 ![](https://github.com/user-attachments/assets/88993a36-6209-42e0-af43-f21339476ee8)
 ![](https://github.com/user-attachments/assets/9e24ad66-906b-4e52-822a-c7b66ffa4384)
 
-## 6. Tài Liệu Liên Quan
-- Báo cáo chi tiết: [(paper.pdf)](paper.pdf)  
-- Slide thuyết trình: [(slides.pdf)](slides.pdf)
+## 6. Related Documents
+- Detailed report: [(paper.pdf)](paper.pdf)  
+- Presentation slides: [(slides.pdf)](slides.pdf)
 
-## 7. Thành Viên
-| Họ và tên              | MSSV       |
-|------------------------|------------|
-| Đinh Bảo Thy           | 23521563   |
-| Võ Ngọc Anh Thy        | 23521565   |
-| Nguyễn Vũ Thùy Trâm    | 23521617   |
+## 7. Team Members
+| Name                    | Student ID |
+|-------------------------|------------|
+| Đinh Bảo Thy            | 23521563   |
+| Võ Ngọc Anh Thy         | 23521565   |
+| Nguyễn Vũ Thùy Trâm     | 23521617   |
